@@ -1,0 +1,6 @@
+@InzyneriaOprogramowaniaProjekt.Server_HostAddress = http://localhost:5053
+
+GET {{InzyneriaOprogramowaniaProjekt.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
