@@ -6,20 +6,20 @@
 }
 
 <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-    <h2>Create a new account.</h2>
+    <h2>Utwórz nowe konto!</h2>
     <hr />
     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
     <div class="row">
         <div class="col-6">
             <div class="form-floating mb-3">
                 <input asp-for="Input.FirstName" class="form-control" autocomplete="firstname" aria-required="true" placeholder="first name" />
-                <label asp-for="Input.FirstName">First Name</label>
+                <label asp-for="Input.FirstName">Imię</label>
             </div>
         </div>
         <div class="col-6">
             <div class="form-floating mb-3">
                 <input asp-for="Input.LastName" class="form-control" autocomplete="lastname" aria-required="true" placeholder="last name" />
-                <label asp-for="Input.LastName">Last Name</label>
+                <label asp-for="Input.LastName">Nazwisko</label>
             </div>
         </div>
     </div>
@@ -30,15 +30,21 @@
     </div>
     <div class="form-floating mb-3">
         <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-        <label asp-for="Input.Password">Password</label>
+        <label asp-for="Input.Password">Hasło</label>
         <span asp-validation-for="Input.Password" class="text-danger"></span>
     </div>
-    <div class="form-floating mb-3">
+    <div class="form-floating sharp-corners mb-3">
         <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-        <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+        <label asp-for="Input.ConfirmPassword">Potwierdz hasło</label>
         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
     </div>
-    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+    <button 
+        id="registerSubmit" 
+        type="submit" 
+        class="w-100 btn btn-lg btn-outline-danger sharp-corners"
+    >
+        Zarejestruj
+    </button>
 </form>
 
 
