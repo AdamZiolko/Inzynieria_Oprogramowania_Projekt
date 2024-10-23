@@ -59,7 +59,9 @@
                 <div class="col-md-4">
                     <div class="card book-card">
                         <div class="card-body">
-                            <h5 class="card-title">@book.Title</h5>
+                            <h5 class="card-title">
+                                @Html.ActionLink(@book.Title, "Details", new { title = @book.Title })
+                            </h5>
                             <h6 class="card-subtitle mb-2 text-muted">@book.Author</h6>
                             <p class="card-text">
                                 <strong>Data wydania:</strong> @book.ReleaseDate.ToString("yyyy") rok <br />

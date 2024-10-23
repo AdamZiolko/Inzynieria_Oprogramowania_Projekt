@@ -1,0 +1,70 @@
+﻿@model Project_Bookworm.Models.Book
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h1 class="display-4">@Model.Title</h1>
+                    <a href="@Url.Action("Index", "Book")" class="btn btn-secondary">Powrót do listy książek</a>
+                </div>
+                <div class="card-body">
+                    <h2 class="text-danger fw-bold">@Model.Author</h2>
+                    <p class="lead text-secondary">@Model.Genre</p>
+                    <p class="text-muted">@Model.ReleaseDate.ToString("yyyy") rok</p>
+                    <hr>
+                    <div class="content mt-4">
+                        <p class="card-text">@Html.Raw(Model.BookContent.GetFormattedContent())</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-header {
+        background: #485563; /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #29323c, #485563); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #29323c, #485563); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        color: white;
+        padding: 20px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .card.shadow-sm {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .card-body {
+        font-family: 'Arial', sans-serif;
+        padding: 30px;
+        background-color: #f8f9fa;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .content {
+        font-size: 1.2em;
+        line-height: 1.8;
+        margin-top: 20px;
+    }
+
+    .lead {
+        font-weight: 300;
+        color: #495057;
+    }
+
+    .text-secondary {
+        color: #6c757d;
+    }
+
+    .text-muted {
+        color: #adb5bd;
+    }
+</style>

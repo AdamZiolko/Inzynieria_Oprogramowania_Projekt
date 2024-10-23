@@ -1,6 +1,7 @@
 ﻿using ProjectBookworm.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 public class BookController : Controller
 {
@@ -39,5 +40,24 @@ public class BookController : Controller
         ViewBag.Genre = genre;
 
         return View(paginatedBooks);
+    }
+
+    public IActionResult Details(string title)
+    {
+        if (string.IsNullOrEmpty(title))
+        {
+            return NotFound();
+        }
+
+        var book = _context.Books
+            .Include(b => b.BookContent)
+            .FirstOrDefault(b => b.Title.ToLower() == title.ToLower());
+
+        if (book == null)
+        {
+            return NotFound();
+        }
+
+        return View(book);
     }
 }

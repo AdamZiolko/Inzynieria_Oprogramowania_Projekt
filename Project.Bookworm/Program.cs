@@ -22,6 +22,15 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 var app = builder.Build();
 
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "bookDetails",
+    pattern: "book/{title}",
+    defaults: new { controller = "Book", action = "Details" });
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -36,6 +45,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 

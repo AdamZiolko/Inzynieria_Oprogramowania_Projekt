@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace Project_Bookworm.Models
 {
@@ -15,5 +16,16 @@ namespace Project_Bookworm.Models
 
         [ForeignKey("BookId")]
         public Book Book { get; set; }
+
+        public string GetFormattedContent()
+        {
+            if (string.IsNullOrEmpty(Content))
+            {
+                return Content;
+            }
+
+            string formattedContent = Regex.Replace(Content, @"\\h\s*(.+?)\s*\\h", "<h2 class=\"my-3\">$1</h2>");
+            return formattedContent;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Project_Bookworm.Models;
+using System.Reflection.Emit;
 
 namespace ProjectBookworm.Data;
 
@@ -22,6 +23,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(b => b.BookContent)
             .WithOne(bc => bc.Book)
             .HasForeignKey<BookContent>(bc => bc.BookId);
+
+        builder.Entity<Book>()
+            .HasIndex(b => b.Title)
+            .IsUnique();
+
 
     }
 }
