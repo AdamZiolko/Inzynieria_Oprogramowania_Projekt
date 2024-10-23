@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace AuthSystem.Migrations
+namespace ProjectBookworm.Migrations
 {
     /// <inheritdoc />
     public partial class BookAndBookContent2 : Migration

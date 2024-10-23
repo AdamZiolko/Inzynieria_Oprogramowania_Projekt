@@ -1,14 +1,13 @@
-﻿using AuthSystem.Areas.Identity.Data;
+﻿using ProjectBookworm.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Project.Bookworm.Models;
 using Project_Bookworm.Models;
 
-namespace AuthSystem.Data;
+namespace ProjectBookworm.Data;
 
-public class AuthDbContext : IdentityDbContext<ApplicationUser>
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
-    public AuthDbContext(DbContextOptions<AuthDbContext> options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }

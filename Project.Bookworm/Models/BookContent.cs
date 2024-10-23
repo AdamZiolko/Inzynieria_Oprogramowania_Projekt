@@ -1,5 +1,4 @@
-﻿using Project.Bookworm.Models;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 namespace Project_Bookworm.Models

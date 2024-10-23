@@ -1,0 +1,101 @@
+﻿@model IEnumerable<Project_Bookworm.Models.Book>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista Książek</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <style>
+        .book-card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+            .book-card:hover {
+                transform: translateY(-5px);
+                cursor: pointer;
+            }
+
+        .pagination {
+            justify-content: center;
+        }
+
+        .form-control, .btn {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styl dla pola wyboru z trójkątem */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4 text-center fst-italic">Tutaj znajdziesz streszczenia książek ...</h1>
+
+        <form method="get" asp-controller="Book" asp-action="Index" class="form-inline justify-content-center mb-4">
+            <input type="text" name="searchString" value="@ViewBag.SearchString" class="form-control mr-2" placeholder="Nazwa lub autor..." />
+            <select name="genre" class="form-control mr-2 custom-select">
+                <option value="">Wybierz gatunek</option>
+                <option value="Książki dla młodzieży">Książki dla młodzieży</option>
+                <option value="Literatura polska">Literatura polska</option>
+                <option value="Fantastyka">Fantastyka</option>
+                <option value="Powieść historyczna">Powieść historyczna</option>
+                <option value="Książka dla dzieci">Książka dla dzieci</option>
+                <option value="Powieść przygodowa">Powieść przygodowa</option>
+                <option value="Dramat">Dramat</option>
+                <option value="Poezja">Poezja</option>
+                <option value="Fantastyka i Science Fiction">Fantastyka i Science Fiction</option>
+                <option value="Książki dla dzieci">Książki dla dzieci</option>
+                <option value="Literatura starożytna">Literatura starożytna</option>
+                <option value="Biografia i reportaż">Biografia i reportaż</option>
+                <option value="Romans">Romans</option>
+            </select>
+            <input type="submit" value="Szukaj" class="btn btn-primary" />
+        </form>
+
+        <div class="row">
+            @foreach (var book in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card book-card">
+                        <div class="card-body">
+                            <h5 class="card-title">@book.Title</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">@book.Author</h6>
+                            <p class="card-text">
+                                <strong>Data wydania:</strong> @book.ReleaseDate.ToString("yyyy") rok <br />
+                                <strong>Gatunek:</strong> @book.Genre
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="?page=@(ViewBag.CurrentPage - 1)&searchString=@ViewBag.SearchString&genre=@ViewBag.Genre">Poprzednia</a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="?page=@i&searchString=@ViewBag.SearchString&genre=@ViewBag.Genre">@i</a>
+                    </li>
+                }
+
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="?page=@(ViewBag.CurrentPage + 1)&searchString=@ViewBag.SearchString&genre=@ViewBag.Genre">Następna</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+
+</body>
+</html>

@@ -1,11 +1,11 @@
-﻿using AuthSystem.Areas.Identity.Data;
-using AuthSystem.Models;
+﻿using ProjectBookworm.Areas.Identity.Data;
+using ProjectBookworm.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace AuthSystem.Controllers
+namespace ProjectBookworm.Controllers
 {
     [Authorize]
     public class HomeController : Controller

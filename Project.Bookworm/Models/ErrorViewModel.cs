@@ -1,4 +1,4 @@
-namespace AuthSystem.Models
+namespace ProjectBookworm.Models
 {
     public class ErrorViewModel
     {

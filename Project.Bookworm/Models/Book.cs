@@ -1,7 +1,6 @@
-﻿using Project_Bookworm.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Project.Bookworm.Models
+namespace Project_Bookworm.Models
 {
     public class Book
     {
