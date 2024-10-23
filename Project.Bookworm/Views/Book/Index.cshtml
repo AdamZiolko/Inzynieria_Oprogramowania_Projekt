@@ -50,6 +50,15 @@
                 <option value="Biografia i reportaż">Biografia i reportaż</option>
                 <option value="Romans">Romans</option>
             </select>
+            <select name="sortOrder" class="form-control mr-2 custom-select">
+                <option value="">Sortuj według</option>
+                <option value="title_asc">Tytuł rosnąco</option>
+                <option value="title_desc">Tytuł malejąco</option>
+                <option value="author_asc">Autor rosnąco</option>
+                <option value="author_desc">Autor malejąco</option>
+                <option value="date_asc">Data wydania rosnąco</option>
+                <option value="date_desc">Data wydania malejąco</option>
+            </select>
             <input type="submit" value="Szukaj" class="btn btn-primary" />
         </form>
 
@@ -78,21 +87,21 @@
                 @if (ViewBag.CurrentPage > 1)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="?page=@(ViewBag.CurrentPage - 1)&searchString=@ViewBag.SearchString&genre=@ViewBag.Genre">Poprzednia</a>
+                        <a class="page-link" href="?page=@(ViewBag.CurrentPage - 1)&searchString=@ViewBag.SearchString&genre=@ViewBag.Genre&sortOrder=@ViewBag.SortOrder">Poprzednia</a>
                     </li>
                 }
 
                 @for (int i = 1; i <= ViewBag.TotalPages; i++)
                 {
                     <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                        <a class="page-link" href="?page=@i&searchString=@ViewBag.SearchString&genre=@ViewBag.Genre">@i</a>
+                        <a class="page-link" href="?page=@i&searchString=@ViewBag.SearchString&genre=@ViewBag.Genre&sortOrder=@ViewBag.SortOrder">@i</a>
                     </li>
                 }
 
                 @if (ViewBag.CurrentPage < ViewBag.TotalPages)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="?page=@(ViewBag.CurrentPage + 1)&searchString=@ViewBag.SearchString&genre=@ViewBag.Genre">Następna</a>
+                        <a class="page-link" href="?page=@(ViewBag.CurrentPage + 1)&searchString=@ViewBag.SearchString&genre=@ViewBag.Genre&sortOrder=@ViewBag.SortOrder">Następna</a>
                     </li>
                 }
             </ul>

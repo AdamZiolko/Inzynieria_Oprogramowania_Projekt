@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Project_Bookworm.Models;
 
 public class BookController : Controller
 {
@@ -12,35 +13,57 @@ public class BookController : Controller
         _context = context;
     }
 
-    public IActionResult Index(string searchString, string genre, int page = 1, int pageSize = 10)
+public IActionResult Index(string searchString, string genre, string sortOrder, int page = 1)
+{
+    var books = from b in _context.Books
+                select b;
+
+    if (!String.IsNullOrEmpty(searchString))
     {
-        var books = from b in _context.Books
-                    select b;
-
-        if (!string.IsNullOrEmpty(searchString))
-        {
-            books = books
-                .Where(
-                    s =>
-                        s.Title.ToLower().Contains(searchString.ToLower()) ||
-                        s.Author.ToLower().Contains(searchString.ToLower())
-                    );
-        }
-
-        if (!string.IsNullOrEmpty(genre))
-        {
-            books = books.Where(s => s.Genre.ToLower().Contains(genre.ToLower()));
-        }
-
-        var paginatedBooks = books.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-
-        ViewBag.CurrentPage = page;
-        ViewBag.TotalPages = (int)Math.Ceiling((double)books.Count() / pageSize);
-        ViewBag.SearchString = searchString;
-        ViewBag.Genre = genre;
-
-        return View(paginatedBooks);
+        books = books.Where(b => b.Title.Contains(searchString) || b.Author.Contains(searchString));
     }
+
+    if (!String.IsNullOrEmpty(genre))
+    {
+        books = books.Where(b => b.Genre == genre);
+    }
+
+    switch (sortOrder)
+    {
+        case "title_asc":
+            books = books.OrderBy(b => b.Title);
+            break;
+        case "title_desc":
+            books = books.OrderByDescending(b => b.Title);
+            break;
+        case "author_asc":
+            books = books.OrderBy(b => b.Author);
+            break;
+        case "author_desc":
+            books = books.OrderByDescending(b => b.Author);
+            break;
+        case "date_asc":
+            books = books.OrderBy(b => b.ReleaseDate);
+            break;
+        case "date_desc":
+            books = books.OrderByDescending(b => b.ReleaseDate);
+            break;
+        default:
+            books = books.OrderBy(b => b.Title);
+            break;
+    }
+
+    int pageSize = 10;
+    var pagedBooks = PaginatedList<Book>.Create(books.AsNoTracking(), page, pageSize);
+
+    ViewBag.CurrentPage = page;
+    ViewBag.TotalPages = (int)Math.Ceiling(books.Count() / (double)pageSize);
+    ViewBag.SearchString = searchString;
+    ViewBag.Genre = genre;
+    ViewBag.SortOrder = sortOrder;
+
+    return View(pagedBooks);
+}
 
     public IActionResult Details(string title)
     {
