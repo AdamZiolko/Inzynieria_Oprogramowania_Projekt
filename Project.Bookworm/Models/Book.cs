@@ -22,7 +22,14 @@ namespace Project_Bookworm.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime ReleaseDate { get; set; }
-        public BookContent BookContent { get; set; }
-    }
 
+        public BookContent BookContent { get; set; }
+
+        [Range(1, 5)]
+        public double Rating { get; set; }
+
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
+
+    }
 }

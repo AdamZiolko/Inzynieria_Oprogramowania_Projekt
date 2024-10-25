@@ -69,7 +69,7 @@
                     <div class="card book-card">
                         <div class="card-body">
                             <h5 class="card-title">
-                                @Html.ActionLink(@book.Title, "Details", new { title = @book.Title })
+                                @Html.ActionLink(@book.Title, "Details", new { id = @book.Id })
                             </h5>
                             <h6 class="card-subtitle mb-2 text-muted">@book.Author</h6>
                             <p class="card-text">
