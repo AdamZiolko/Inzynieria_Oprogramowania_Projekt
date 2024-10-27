@@ -1,0 +1,98 @@
+﻿@model ProjectBookworm.Models.UserManagementViewModel
+
+<h1>Zarządzanie użytkownikami</h1>
+
+<!-- Formularz do dodawania użytkowników -->
+<form id="createUserForm" method="post">
+    <div class="form-group">
+        <label for="FirstName">Imię</label>
+        <input type="text" class="form-control" id="FirstName" name="FirstName" required />
+    </div>
+    <div class="form-group">
+        <label for="LastName">Nazwisko</label>
+        <input type="text" class="form-control" id="LastName" name="LastName" required />
+    </div>
+    <div class="form-group">
+        <label for="UserName">Nazwa użytkownika</label>
+        <input type="text" class="form-control" id="UserName" name="UserName" required />
+    </div>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="email" class="form-control" id="Email" name="Email" required />
+    </div>
+    <div class="form-group">
+        <label for="Password">Hasło</label>
+        <input type="password" class="form-control" id="Password" name="Password" required />
+    </div>
+    <div class="form-group">
+        <label for="PhoneNumber">Numer telefonu</label>
+        <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" />
+    </div>
+    <div class="form-group">
+        <label for="Role">Rola</label>
+        <select class="form-control" id="Role" name="Role">
+            <option value="0">Użytkownik</option>
+            <option value="1">Administrator</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Dodaj użytkownika</button>
+</form>
+
+<!-- Tabela z listą użytkowników -->
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Nazwa użytkownika</th>
+            <th>Email</th>
+            <th>Numer telefonu</th>
+            <th>Rola</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                <td>@(user.Role == 1 ? "Administrator" : "Użytkownik")</td>
+                <td>
+                    <a class="btn btn-warning btn-sm" asp-action="EditUser" asp-route-id="@user.Id">Edytuj</a>
+                    <a class="btn btn-danger btn-sm" asp-action="DeleteUser" asp-route-id="@user.Id">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Skrypt obsługujący AJAX -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#createUserForm").submit(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: "/usermanagement/CreateUser",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert("Użytkownik został dodany pomyślnie.");
+                        location.reload(); // Odśwież stronę, aby zobaczyć nowego użytkownika
+                    } else {
+                        alert("Błąd: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Wystąpił błąd podczas dodawania użytkownika.");
+                }
+            });
+        });
+    });
+</script>
