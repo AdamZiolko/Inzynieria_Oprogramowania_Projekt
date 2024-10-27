@@ -16,10 +16,49 @@
                     <h2 class="text-danger fw-bold">@Model.Author</h2>
                     <p class="lead text-secondary">@Model.Genre</p>
                     <p class="text-muted">@Model.ReleaseDate.ToString("yyyy") rok</p>
+                    <p class="text-muted">Rating: @Model.Rating</p>
                     <hr>
                     <div class="content mt-4">
                         <p class="card-text">@Html.Raw(Model.BookContent.GetFormattedContent())</p>
                     </div>
+                    <h3 class="mt-5">Comments</h3>
+
+                    @if (Model.Comments != null && Model.Comments.Any())
+                    {
+                        @foreach (var comment in Model.Comments)
+                        {
+                            <div class="mb-3">
+                                <p>@comment.Content</p>
+                                <p class="text-muted">
+                                    @comment.DateAdded.ToShortDateString() by @comment.User.UserName
+                                </p>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">Brak komentarzy.</p>
+                    }
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <h3 class="mt-5">Add a Comment</h3>
+                        <form asp-action="AddComment" method="post">
+                            <input type="hidden" name="bookId" value="@Model.Id" />
+                            <textarea name="content" class="form-control mb-3" required></textarea>
+                            <button type="submit" class="btn btn-primary">Add Comment</button>
+                        </form>
+                        <h3 class="mt-5">Add a Rating</h3>
+                        <form asp-action="AddRating" method="post">
+                            <input type="hidden" name="bookId" value="@Model.Id" />
+                            <input type="number" name="value" class="form-control mb-3" min="1" max="5" required />
+                            <button type="submit" class="btn btn-primary">Add Rating</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Musisz być zalogowany, aby dodać komentarz lub ocenę.</p>
+                    }
                 </div>
             </div>
         </div>

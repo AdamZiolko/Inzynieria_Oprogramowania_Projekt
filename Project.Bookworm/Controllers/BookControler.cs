@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Project_Bookworm.Models;
+using System.Security.Claims;
 
 public class BookController : Controller
 {
@@ -65,16 +66,19 @@ public IActionResult Index(string searchString, string genre, string sortOrder, 
     return View(pagedBooks);
 }
 
-    public IActionResult Details(string title)
+    public IActionResult Details(int id)
     {
-        if (string.IsNullOrEmpty(title))
+        if (id <= 0)
         {
             return NotFound();
         }
 
         var book = _context.Books
             .Include(b => b.BookContent)
-            .FirstOrDefault(b => b.Title.ToLower() == title.ToLower());
+            .Include(b => b.Comments)
+                .ThenInclude(c => c.User)
+            .Include(b => b.Ratings)
+            .FirstOrDefault(b => b.Id == id);
 
         if (book == null)
         {
@@ -82,5 +86,50 @@ public IActionResult Index(string searchString, string genre, string sortOrder, 
         }
 
         return View(book);
+    }
+
+    [HttpPost]
+    public IActionResult AddComment(int bookId, string content)
+    {
+        if (string.IsNullOrEmpty(content))
+        {
+            return BadRequest("Content cannot be empty.");
+        }
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var comment = new Comment
+        {
+            BookId = bookId,
+            UserId = userId,
+            Content = content,
+            DateAdded = DateTime.Now
+        };
+
+        _context.Comments.Add(comment);
+        _context.SaveChanges();
+
+        return RedirectToAction("Details", new { id = bookId });
+    }
+
+    [HttpPost]
+    public IActionResult AddRating(int bookId, double value)
+    {
+        if (value < 1 || value > 5)
+        {
+            return BadRequest("Rating value must be between 1 and 5.");
+        }
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var rating = new Rating
+        {
+            BookId = bookId,
+            UserId = userId,
+            Value = value
+        };
+
+        _context.Ratings.Add(rating);
+        _context.SaveChanges();
+
+        return RedirectToAction("Details", new { id = bookId });
     }
 }

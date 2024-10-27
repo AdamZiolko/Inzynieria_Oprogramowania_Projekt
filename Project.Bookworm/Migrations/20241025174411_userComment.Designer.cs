@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectBookworm.Data;
 
@@ -11,9 +12,11 @@ using ProjectBookworm.Data;
 namespace ProjectBookworm.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241025174411_userComment")]
+    partial class userComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,7 +292,7 @@ namespace ProjectBookworm.Migrations
                     b.HasIndex("BookId")
                         .IsUnique();
 
-                    b.ToTable("BookContents", (string)null);
+                    b.ToTable("BookContents");
                 });
 
             modelBuilder.Entity("Project_Bookworm.Models.Comment", b =>
@@ -321,34 +324,7 @@ namespace ProjectBookworm.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("Project_Bookworm.Models.Rating", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("Value")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Ratings");
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -432,33 +408,12 @@ namespace ProjectBookworm.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Project_Bookworm.Models.Rating", b =>
-                {
-                    b.HasOne("Project_Bookworm.Models.Book", "Book")
-                        .WithMany("Ratings")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjectBookworm.Areas.Identity.Data.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Project_Bookworm.Models.Book", b =>
                 {
                     b.Navigation("BookContent")
                         .IsRequired();
 
                     b.Navigation("Comments");
-
-                    b.Navigation("Ratings");
                 });
 #pragma warning restore 612, 618
         }

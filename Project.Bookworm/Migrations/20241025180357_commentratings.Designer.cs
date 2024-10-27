@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectBookworm.Data;
 
@@ -11,9 +12,11 @@ using ProjectBookworm.Data;
 namespace ProjectBookworm.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241025180357_commentratings")]
+    partial class commentratings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,7 +292,7 @@ namespace ProjectBookworm.Migrations
                     b.HasIndex("BookId")
                         .IsUnique();
 
-                    b.ToTable("BookContents", (string)null);
+                    b.ToTable("BookContents");
                 });
 
             modelBuilder.Entity("Project_Bookworm.Models.Comment", b =>

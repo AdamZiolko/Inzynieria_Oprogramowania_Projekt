@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Project_Bookworm.Models;
-using System.Reflection.Emit;
 
 namespace ProjectBookworm.Data;
 
@@ -14,6 +13,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
     public DbSet<Book> Books { get; set; }
     public DbSet<BookContent> BookContents { get; set; }
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
