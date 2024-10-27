@@ -21,12 +21,12 @@
         <input type="email" class="form-control" id="Email" name="Email" required />
     </div>
     <div class="form-group">
-        <label for="Password">Hasło</label>
-        <input type="password" class="form-control" id="Password" name="Password" required />
-    </div>
-    <div class="form-group">
         <label for="PhoneNumber">Numer telefonu</label>
         <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" />
+    </div>
+    <div class="form-group">
+        <label for="Password">Hasło</label> 
+        <input type="password" class="form-control" id="Password" name="Password" required />
     </div>
     <div class="form-group">
         <label for="Role">Rola</label>
@@ -62,8 +62,8 @@
                 <td>@user.PhoneNumber</td>
                 <td>@(user.Role == 1 ? "Administrator" : "Użytkownik")</td>
                 <td>
-                    <a class="btn btn-warning btn-sm" asp-action="EditUser" asp-route-id="@user.Id">Edytuj</a>
-                    <a class="btn btn-danger btn-sm" asp-action="DeleteUser" asp-route-id="@user.Id">Usuń</a>
+                    <button class="btn btn-warning btn-sm edit-user" data-email="@user.Email" data-id="@user.Id" data-firstname="@user.FirstName" data-lastname="@user.LastName" data-username="@user.UserName" data-phonenumber="@user.PhoneNumber" data-role="@user.Role">Edytuj</button>
+                    <button class="btn btn-danger btn-sm delete-user" data-email="@user.Email">Usuń</button>
                 </td>
             </tr>
         }
@@ -84,7 +84,7 @@
                 success: function (response) {
                     if (response.success) {
                         alert("Użytkownik został dodany pomyślnie.");
-                        location.reload(); // Odśwież stronę, aby zobaczyć nowego użytkownika
+                        location.reload();
                     } else {
                         alert("Błąd: " + response.message);
                     }
@@ -94,5 +94,122 @@
                 }
             });
         });
+
+        $(".delete-user").click(function () {
+            var email = $(this).data("email");
+            if (confirm("Czy na pewno chcesz usunąć użytkownika o adresie email: " + email + "?")) {
+                $.ajax({
+                    url: "/usermanagement/DeleteUser",
+                    type: "POST",
+                    data: { email: email },
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Użytkownik został usunięty pomyślnie.");
+                            location.reload();
+                        } else {
+                            alert("Błąd: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Wystąpił błąd podczas usuwania użytkownika.");
+                    }
+                });
+            }
+        });
+
+        $(".edit-user").click(function () {
+            var email = $(this).data("email");
+            var userId = $(this).data("id");
+            var firstName = $(this).data("firstname");
+            var lastName = $(this).data("lastname");
+            var userName = $(this).data("username");
+            var phoneNumber = $(this).data("phonenumber");
+            var role = $(this).data("role");
+
+            var editFormHtml = `
+                    <div class="form-group">
+                        <label for="EditFirstName">Imię</label>
+                        <input type="text" class="form-control" id="EditFirstName" value="${firstName}" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="EditLastName">Nazwisko</label>
+                        <input type="text" class="form-control" id="EditLastName" value="${lastName}" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="EditUserName">Nazwa użytkownika</label>
+                        <input type="text" class="form-control" id="EditUserName" value="${userName}" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="EditEmail">Email</label>
+                        <input type="email" class="form-control" id="EditEmail" value="${email}" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="EditPhoneNumber">Numer telefonu</label>
+                        <input type="text" class="form-control" id="EditPhoneNumber" value="${phoneNumber}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="EditRole">Rola</label>
+                        <select class="form-control" id="EditRole">
+                            <option value="0" ${role == 0 ? 'selected' : ''}>Użytkownik</option>
+                            <option value="1" ${role == 1 ? 'selected' : ''}>Administrator</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="EditPassword">Hasło</label>
+                        <input type="password" class="form-control" id="EditPassword" />
+                    </div>
+                    <button class="btn btn-primary save-user" data-id="${userId}">Zapisz</button>
+                `;
+
+            $('#editUserModal .modal-body').html(editFormHtml);
+            $('#editUserModal').modal('show'); 
+
+            $(".save-user").off("click").on("click", function () { 
+                var updatedData = {
+                    Id: userId,
+                    FirstName: $("#EditFirstName").val(),
+                    LastName: $("#EditLastName").val(),
+                    UserName: $("#EditUserName").val(),
+                    Email: $("#EditEmail").val(),
+                    PhoneNumber: $("#EditPhoneNumber").val(),
+                    Role: $("#EditRole").val(),
+                    Password: $("#EditPassword").val() 
+                };
+
+                $.ajax({
+                    url: "/usermanagement/EditUser",
+                    type: "POST",
+                    data: updatedData,
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Użytkownik został zaktualizowany.");
+                            $('#editUserModal').modal('hide'); 
+                            location.reload();
+                        } else {
+                            alert("Błąd: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Wystąpił błąd podczas aktualizacji użytkownika.");
+                    }
+                });
+            });
+        });
     });
 </script>
+
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Edycja użytkownika</h5>
+            
+                
+            </div>
+            <div class="modal-body">
+            </div>
+            
+            </div>
+        </div>
+    </div>
+

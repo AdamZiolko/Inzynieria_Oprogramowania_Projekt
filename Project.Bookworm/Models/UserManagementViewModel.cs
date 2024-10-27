@@ -6,6 +6,7 @@ namespace ProjectBookworm.Models
 {
     public class UserManagementViewModel
     {
+
         [Required]
         public string FirstName { get; set; }
 
