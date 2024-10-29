@@ -4,25 +4,17 @@ using ProjectBookworm.Data;
 using ProjectBookworm.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("AuthDbContextConnection") ?? throw new InvalidOperationException("Connection string 'AuthDbContextConnection' not found.");
 
-// Pobranie po³¹czenia z baz¹ danych
-var connectionString = builder.Configuration.GetConnectionString("AuthDbContextConnection")
-    ?? throw new InvalidOperationException("Connection string 'AuthDbContextConnection' not found.");
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
-// Rejestracja kontekstu bazy danych
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// Rejestracja to¿samoœci z rolami
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders(); // U¿yj tej linii, aby dodaæ domyœlne dostawców tokenów
-
-// Dodanie us³ug do kontenera
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-// Konfiguracja opcji to¿samoœci
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireUppercase = false;
@@ -30,25 +22,6 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 var app = builder.Build();
 
-// Tworzenie ról po uruchomieniu aplikacji
-await using (var scope = app.Services.CreateAsyncScope())
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-    // Sprawdzenie, czy role istniej¹, jeœli nie, utworzenie ich
-    if (!await roleManager.RoleExistsAsync("Administrator"))
-    {
-        await roleManager.CreateAsync(new IdentityRole("Administrator"));
-    }
-
-    if (!await roleManager.RoleExistsAsync("U¿ytkownik"))
-    {
-        await roleManager.CreateAsync(new IdentityRole("U¿ytkownik"));
-    }
-}
-
-// Mapowanie tras
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -58,7 +31,7 @@ app.MapControllerRoute(
     pattern: "book/{title}",
     defaults: new { controller = "Book", action = "Details" });
 
-// Konfiguracja potoku ¿¹dañ HTTP
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -69,6 +42,11 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
+
 
 app.Run();

@@ -289,7 +289,7 @@ namespace ProjectBookworm.Migrations
                     b.HasIndex("BookId")
                         .IsUnique();
 
-                    b.ToTable("BookContents", (string)null);
+                    b.ToTable("BookContents");
                 });
 
             modelBuilder.Entity("Project_Bookworm.Models.Comment", b =>

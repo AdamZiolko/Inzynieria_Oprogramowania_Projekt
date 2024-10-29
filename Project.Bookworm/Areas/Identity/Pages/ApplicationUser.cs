@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
 namespace ProjectBookworm.Areas.Identity.Data
 {
+
     public class ApplicationUser : IdentityUser
     {
         [PersonalData]

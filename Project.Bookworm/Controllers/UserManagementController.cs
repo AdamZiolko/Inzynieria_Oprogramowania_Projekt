@@ -31,7 +31,7 @@ namespace ProjectBookworm.Controllers
                     EmailConfirmed = false,
                     PhoneNumberConfirmed = false,
                     TwoFactorEnabled = false,
-                    Role = model.Role == 1 ? 1 : 0 
+                    Role = model.Role == 1 ? 1 : 0
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -100,7 +100,7 @@ namespace ProjectBookworm.Controllers
             user.UserName = model.UserName;
             user.PhoneNumber = model.PhoneNumber;
 
-            user.Role = model.Role; 
+            user.Role = model.Role;
 
             if (!string.IsNullOrEmpty(model.Password))
             {
@@ -131,7 +131,7 @@ namespace ProjectBookworm.Controllers
             public string LastName { get; set; }
             public string UserName { get; set; }
             public string PhoneNumber { get; set; }
-            public string Password { get; set; } 
+            public string Password { get; set; }
         }
 
 

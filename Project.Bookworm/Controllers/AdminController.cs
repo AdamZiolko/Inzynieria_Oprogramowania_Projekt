@@ -5,18 +5,15 @@ using ProjectBookworm.Models;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-
 namespace ProjectBookworm.Controllers
 {
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-
         public AdminController(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
-
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -26,13 +23,11 @@ namespace ProjectBookworm.Controllers
             };
             return View(model);
         }
-
         [HttpGet]
         public IActionResult CreateUser()
         {
             return View(); // Zwraca widok CreateUser
         }
-
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserManagementViewModel model)
         {
@@ -46,9 +41,7 @@ namespace ProjectBookworm.Controllers
                     LastName = model.LastName,
                     PhoneNumber = model.PhoneNumber
                 };
-
                 var result = await _userManager.CreateAsync(user, model.Password);
-
                 if (result.Succeeded)
                 {
                     if (model.Role == 1)
@@ -59,7 +52,6 @@ namespace ProjectBookworm.Controllers
                     {
                         await _userManager.AddToRoleAsync(user, "User");
                     }
-
                     // Zamiast przekierowywania, wyświetl komunikat o sukcesie
                     ModelState.Clear(); // Czyści błędy w ModelState
                     ViewBag.Message = "Użytkownik został pomyślnie utworzony!";
@@ -73,8 +65,7 @@ namespace ProjectBookworm.Controllers
                     }
                 }
             }
-
-            return View(model); 
+            return View(model);
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿@model ProjectBookworm.Models.UserManagementViewModel
-
 <h2>Dodaj użytkownika</h2>
-
 <form asp-action="CreateUser" method="post">
     <div class="form-group">
         <label asp-for="UserName"></label>
@@ -49,7 +47,6 @@
         </div>
     }
 </form>
-
 <div>
     <a asp-action="Index">Powrót do listy użytkowników</a>
 </div>
