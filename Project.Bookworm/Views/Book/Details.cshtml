@@ -21,6 +21,8 @@
                     <div class="content mt-4">
                         <p class="card-text">@Html.Raw(Model.BookContent.GetFormattedContent())</p>
                     </div>
+
+
                     <h3 class="mt-5">Comments</h3>
 
                     @if (Model.Comments != null && Model.Comments.Any())
@@ -51,7 +53,14 @@
                         <h3 class="mt-5">Add a Rating</h3>
                         <form asp-action="AddRating" method="post">
                             <input type="hidden" name="bookId" value="@Model.Id" />
-                            <input type="number" name="value" class="form-control mb-3" min="1" max="5" required />
+                            <input type="hidden" id="rating-value" name="value" />
+                            <div id="star-rating" class="mb-3">
+                                <span class="star" data-value="1">&#9733;</span>
+                                <span class="star" data-value="2">&#9733;</span>
+                                <span class="star" data-value="3">&#9733;</span>
+                                <span class="star" data-value="4">&#9733;</span>
+                                <span class="star" data-value="5">&#9733;</span>
+                            </div>
                             <button type="submit" class="btn btn-primary">Add Rating</button>
                         </form>
                     }
@@ -65,6 +74,24 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('#star-rating .star');
+        const ratingValue = document.getElementById('rating-value');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function () {
+                const value = this.getAttribute('data-value');
+                ratingValue.value = value;
+
+                stars.forEach(s => {
+                    s.style.color = s.getAttribute('data-value') <= value ? 'gold' : 'gray';
+                });
+            });
+        });
+    });
+</script>
+
 <style>
     .card-header {
         background: #485563; /* fallback for old browsers */
@@ -73,6 +100,12 @@
         color: white;
         padding: 20px;
         border-radius: 10px 10px 0 0;
+    }
+
+    .star {
+        font-size: 2em;
+        cursor: pointer;
+        color: gray;
     }
 
     .card.shadow-sm {

@@ -120,15 +120,36 @@ public IActionResult Index(string searchString, string genre, string sortOrder, 
         }
 
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var rating = new Rating
+        if (userId == null)
         {
-            BookId = bookId,
-            UserId = userId,
-            Value = value
-        };
+            return Unauthorized("User must be logged in to add a rating.");
+        }
 
-        _context.Ratings.Add(rating);
+        var existingRating = _context.Ratings.FirstOrDefault(r => r.BookId == bookId && r.UserId == userId);
+        if (existingRating != null)
+        {
+            existingRating.Value = value;
+        }
+        else
+        {
+            var rating = new Rating
+            {
+                BookId = bookId,
+                UserId = userId,
+                Value = value
+            };
+            _context.Ratings.Add(rating);
+        }
+
         _context.SaveChanges();
+
+        // Aktualizacja średniej oceny książki
+        var book = _context.Books.Include(b => b.Ratings).FirstOrDefault(b => b.Id == bookId);
+        if (book != null)
+        {
+            book.Rating = book.Ratings.Average(r => r.Value);
+            _context.SaveChanges();
+        }
 
         return RedirectToAction("Details", new { id = bookId });
     }
