@@ -1,47 +1,31 @@
-﻿<form asp-action="CreateBook" method="post">
+﻿@model Project_Bookworm.Models.Book
+
+@{
+    ViewData["Title"] = "Dodaj książkę";
+}
+
+<h2>Dodaj książkę</h2>
+
+<form asp-action="CreateBook" method="post">
     <div class="form-group">
-        <label for="Title">Tytuł</label>
-        <input type="text" class="form-control" id="Title" name="Title" required />
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label for="Author">Autor</label>
-        <input type="text" class="form-control" id="Author" name="Author" required />
+        <label asp-for="Author"></label>
+        <input asp-for="Author" class="form-control" />
+        <span asp-validation-for="Author" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label for="ISBN">ISBN</label>
-        <input type="text" class="form-control" id="ISBN" name="ISBN" required />
+        <label asp-for="Genre"></label>
+        <input asp-for="Genre" class="form-control" />
+        <span asp-validation-for="Genre" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label for="Category">Kategoria</label>
-        <input type="text" class="form-control" id="Category" name="Category" />
+        <label asp-for="ReleaseDate"></label>
+        <input asp-for="ReleaseDate" class="form-control" />
+        <span asp-validation-for="ReleaseDate" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Dodaj książkę</button>
 </form>
-@*
-<table class="table mt-4">
-    <thead>
-        <tr>
-            <th>Tytuł</th>
-            <th>Autor</th>
-            <th>ISBN</th>
-            <th>Kategoria</th>
-            <th>Akcje</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var book in Model.Books)
-        {
-            <tr>
-                <td>@book.Title</td>
-                <td>@book.Author</td>
-                <td>@book.ISBN</td>
-                <td>@book.Category</td>
-                <td>
-                    <a class="btn btn-warning btn-sm" asp-action="EditBook" asp-route-id="@book.Id">Edytuj</a>
-                    <a class="btn btn-danger btn-sm" asp-action="DeleteBook" asp-route-id="@book.Id">Usuń</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-*@

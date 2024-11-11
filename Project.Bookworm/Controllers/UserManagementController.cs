@@ -4,6 +4,8 @@ using ProjectBookworm.Models;
 using ProjectBookworm.Areas.Identity.Data;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Project_Bookworm.Models;
 
 namespace ProjectBookworm.Controllers
 {
@@ -15,6 +17,7 @@ namespace ProjectBookworm.Controllers
         {
             _userManager = userManager;
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserManagementViewModel model)

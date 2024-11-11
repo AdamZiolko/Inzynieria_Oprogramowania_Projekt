@@ -1,9 +1,32 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Strona Główna";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>User Id : @ViewData["UserID"]</p>
+<style>
+    .welcome-container {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .welcome-header {
+        color: #007bff;
+    }
+
+    .welcome-text {
+        font-size: 1.2em;
+        margin-top: 10px;
+    }
+
+    .user-id {
+        font-weight: bold;
+        color: #28a745;
+    }
+</style>
+
+<div class="text-center welcome-container">
+    <h1 class="display-4 welcome-header">Witamy na naszej stronie!</h1>
+    <p class="welcome-text">Cieszymy się, że jesteś z nami. Mamy nadzieję, że znajdziesz tutaj wszystko, czego potrzebujesz.</p>
+    <p class="user-id"></p>
 </div>

@@ -27,5 +27,10 @@ namespace Project_Bookworm.Models
             string formattedContent = Regex.Replace(Content, @"\\h\s*(.+?)\s*\\h", "<h2 class=\"my-3\">$1</h2>");
             return formattedContent;
         }
+
+        public BookContent(int id) { 
+            Content = "";
+            BookId = id;
+        }
     }
 }

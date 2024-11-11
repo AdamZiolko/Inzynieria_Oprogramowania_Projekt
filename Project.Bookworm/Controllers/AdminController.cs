@@ -2,17 +2,22 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectBookworm.Areas.Identity.Data;
 using ProjectBookworm.Models;
-using System.Threading.Tasks;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Project_Bookworm.Models;
+using ProjectBookworm.Data;
 namespace ProjectBookworm.Controllers
 {
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        public AdminController(UserManager<ApplicationUser> userManager)
-        {
+        private readonly ApplicationDbContext _context;
+
+        public AdminController(
+            UserManager<ApplicationUser> userManager,
+            ApplicationDbContext context
+        ) {
             _userManager = userManager;
+            _context = context;
         }
         public async Task<IActionResult> Index()
         {
@@ -23,10 +28,11 @@ namespace ProjectBookworm.Controllers
             };
             return View(model);
         }
+
         [HttpGet]
         public IActionResult CreateUser()
         {
-            return View(); // Zwraca widok CreateUser
+            return View(); 
         }
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserManagementViewModel model)
@@ -52,13 +58,12 @@ namespace ProjectBookworm.Controllers
                     {
                         await _userManager.AddToRoleAsync(user, "User");
                     }
-                    // Zamiast przekierowywania, wyświetl komunikat o sukcesie
-                    ModelState.Clear(); // Czyści błędy w ModelState
+
+                    ModelState.Clear(); 
                     ViewBag.Message = "Użytkownik został pomyślnie utworzony!";
                 }
                 else
                 {
-                    // W przypadku błędów dodaj je do ModelState
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
@@ -66,6 +71,24 @@ namespace ProjectBookworm.Controllers
                 }
             }
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult CreateBook(Book book)
+        {
+            try
+            {
+                _context.Books.Add(book);
+                _context.SaveChanges();
+
+                _context.BookContents.Add(new BookContent(book.Id));
+                _context.SaveChanges();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);    
+            }
+            
+            return View("_BookManagementPartial", book);  
         }
     }
 }

@@ -153,4 +153,6 @@ public IActionResult Index(string searchString, string genre, string sortOrder, 
 
         return RedirectToAction("Details", new { id = bookId });
     }
+
+
 }
